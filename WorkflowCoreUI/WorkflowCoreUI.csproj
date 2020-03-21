@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ConversationWorkflowItems\**" />
+    <Compile Remove="Images\**" />
+    <EmbeddedResource Remove="ConversationWorkflowItems\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <None Remove="ConversationWorkflowItems\**" />
+    <None Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Command.cs" />
+    <Compile Remove="Configuration.cs" />
+    <Compile Remove="FConversation.cs" />
+    <Compile Remove="FConversation.Designer.cs" />
+    <Compile Remove="Workflows\ConversationWorkflow.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="FConversation.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WorkflowCore" Version="3.1.5" />
+    <PackageReference Include="WorkflowCore.Persistence.SqlServer" Version="3.1.0" />
+  </ItemGroup>
+
+</Project>
