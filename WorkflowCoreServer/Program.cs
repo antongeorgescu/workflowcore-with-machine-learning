@@ -43,7 +43,7 @@ namespace WorkflowCoreServer
             host.Stop();
         }
 
-        private static IServiceProvider ConfigureServices()
+        public static IServiceProvider ConfigureServices()
         {
             //setup dependency injection
             IServiceCollection services = new ServiceCollection();

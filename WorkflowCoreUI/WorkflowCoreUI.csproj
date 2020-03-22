@@ -9,10 +9,13 @@
   <ItemGroup>
     <Compile Remove="ConversationWorkflowItems\**" />
     <Compile Remove="Images\**" />
+    <Compile Remove="Workflows\**" />
     <EmbeddedResource Remove="ConversationWorkflowItems\**" />
     <EmbeddedResource Remove="Images\**" />
+    <EmbeddedResource Remove="Workflows\**" />
     <None Remove="ConversationWorkflowItems\**" />
     <None Remove="Images\**" />
+    <None Remove="Workflows\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,11 +23,14 @@
     <Compile Remove="Configuration.cs" />
     <Compile Remove="FConversation.cs" />
     <Compile Remove="FConversation.Designer.cs" />
-    <Compile Remove="Workflows\ConversationWorkflow.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="FConversation.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Workflows\EventSampleWorkflow.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,16 +16,18 @@ namespace WorkflowCoreServer
         public void Build(IWorkflowBuilder<MyDataClass> builder)
         {
             var branch1 = builder.CreateBranch()
-                .StartWith(context => ExecutionResult.Next())
-                .Then(context => Console.WriteLine("Otto says: So sad you feel crappy today, Manuel."))
+                //.StartWith(context => ExecutionResult.Next())
+                .StartWith(context => Console.WriteLine("Otto says: So sad you feel crappy today, Manuel."))
                 .Then(context => Console.WriteLine("Otto says: Let me distract you with a riddle..."))
                 .Then(context => Letmegiveyouariddle());
-            
+
+
             var branch2 = builder.CreateBranch()
-                .StartWith(context => ExecutionResult.Next())
-                .Then(context => Console.WriteLine("Otto says: Glad you feel happy today, Manuel."))
+                //.StartWith(context => ExecutionResult.Next())
+                .StartWith(context => Console.WriteLine("Otto says: Glad you feel happy today, Manuel."))
                 .Then(context => Console.WriteLine("Otto says: Let's toast to the good times..."))
-                .Then(context => Letmecheeryouup()); 
+                .Then(context => Letmecheeryouup());
+                
 
             builder
                 .StartWith(context => ExecutionResult.Next())
@@ -41,7 +43,21 @@ namespace WorkflowCoreServer
                     .Input(step => step.Message, data => "Manuel replies: " + data.Value1)
                     .Decide(data => data.Value1)
                         .Branch((data, outcome) => data.Value1.Contains("crappy"), branch1)
-                        .Branch((data, outcome) => data.Value1.Contains("happy"), branch2);
+                        .Branch((data, outcome) => data.Value1.Contains("happy"), branch2)
+                .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
+                    .Output(data => data.Value1, step => step.EventData)
+                .Then<CustomMessage>()
+                    .Input(step => step.Message, data => "Manuel replies: " + data.Value1)
+                .Then(context => Console.WriteLine("Otto says: Give me a city name of your choice!"))
+                .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
+                    .Output(data => data.Value1, step => step.EventData)
+                .Then<GetLocationInfo>()
+                    .Input(step => step.Location, data => "Manuel replies: " + data.Value1)
+                    .Output(data => data.Value1, step => step.CityCode)
+                .Then<GetWeatherData>()
+                    .Input(step => step.LocationCode, data => data.Value1)
+
+                .EndWorkflow();
         }
 
         private void Letmegiveyouariddle()

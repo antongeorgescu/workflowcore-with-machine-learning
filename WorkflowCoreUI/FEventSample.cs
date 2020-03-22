@@ -25,7 +25,7 @@ namespace WorkflowCoreUI
             host.RegisterWorkflow<EventSampleWorkflow, MyDataClass>();
             host.Start();
 
-            var initialData = new MyDataClass();
+            //var initialData = new MyDataClass();
 
             //var workflowId = host.StartWorkflow("EventSampleWorkflow", 1, initialData).Result;
             tbMyText.Enabled = true;
@@ -37,13 +37,13 @@ namespace WorkflowCoreUI
             IServiceCollection services = new ServiceCollection();
             services.AddLogging();
             var coll = services.AddWorkflow(x => x.UseSqlServer(@"Server=.\MSSQLSERVER2;Database=WorkflowCore;Trusted_Connection=True;", true, true));
-            
+
             var serviceProvider = services.BuildServiceProvider();
 
             return serviceProvider;
         }
 
-        
+
         private void bnSubmit_Click(object sender, EventArgs e)
         {
             host.PublishEvent("MyEvent", tbWorkflowId.Text, tbMyText.Text);
