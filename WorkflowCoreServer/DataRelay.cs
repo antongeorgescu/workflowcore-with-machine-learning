@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WorkflowCoreServer
 {
-    public class MyDataClass
+    public class DataRelay
     {
         public string Value1 { get; set; }
     }
