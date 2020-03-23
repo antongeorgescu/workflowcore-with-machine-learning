@@ -12,43 +12,52 @@ namespace WorkflowCoreServer
         public string Id => "EventSampleWorkflow";
             
         public int Version => 1;
+        public WorkflowStatus Status => WorkflowStatus.Runnable;
             
         public void Build(IWorkflowBuilder<DataRelay> builder)
         {
             var branch1 = builder.CreateBranch()
                 //.StartWith(context => ExecutionResult.Next())
-                .StartWith(context => Console.WriteLine("Otto says: So sad you feel crappy today, Manuel."))
-                .Then(context => Console.WriteLine("Otto says: Let me distract you with a riddle..."))
-                .Then(context => Letmegiveyouariddle());
-
-
+                .StartWith<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: So sad you are in a bad mood today, Manuel.")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: Let me distract you with a riddle...")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => Letmegiveyouariddle());
+            
             var branch2 = builder.CreateBranch()
                 //.StartWith(context => ExecutionResult.Next())
-                .StartWith(context => Console.WriteLine("Otto says: Glad you feel happy today, Manuel."))
-                .Then(context => Console.WriteLine("Otto says: Let's toast to the good times..."))
-                .Then(context => Letmecheeryouup());
-                
-
+                .StartWith<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: Glad you are in a good mood today, Manuel.")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: Let's toast to the good times...")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => Letmecheeryouup());
+            
             builder
-                .StartWith(context => ExecutionResult.Next())
-                .Then(context => Console.WriteLine("Otto says: Hello Manuel!"))
+                .StartWith<SystemMessage>()
+                    .Input(step => step.Message, data => "Workflow started...")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: Hello Manuel!")
                 .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
                     .Output(data => data.Value1, step => step.EventData)
                 .Then<CustomMessage>()
                     .Input(step => step.Message, data => "Manuel replies: " + data.Value1)
-                .Then(context => Console.WriteLine("Otto says: How are you doing today?"))
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: How are you doing today?")
                 .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
                     .Output(data => data.Value1, step => step.EventData)
                 .Then<CustomMessage>()
                     .Input(step => step.Message, data => "Manuel replies: " + data.Value1)
                     .Decide(data => data.Value1)
-                        .Branch((data, outcome) => data.Value1.Contains("crappy"), branch1)
-                        .Branch((data, outcome) => data.Value1.Contains("happy"), branch2)
+                        .Branch((data, outcome) => ReadMood(data.Value1) == "bad", branch1)
+                        .Branch((data, outcome) => ReadMood(data.Value1) == "good", branch2)
                 .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
                     .Output(data => data.Value1, step => step.EventData)
                 .Then<CustomMessage>()
                     .Input(step => step.Message, data => "Manuel replies: " + data.Value1)
-                .Then(context => Console.WriteLine("Otto says: Give me a city name of your choice!"))
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: See how smart I am...Give me a city name of your choice!")
                 .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
                     .Output(data => data.Value1, step => step.EventData)
                 .Then<GetLocationInfo>()
@@ -56,30 +65,40 @@ namespace WorkflowCoreServer
                     .Output(data => data.Value1, step => step.Location)
                 .Then<GetWeatherData>()
                     .Input(step => step.CityCode, data => data.Value1)
-                .Then(context => Console.WriteLine("Otto says: I have to go now.Bye!"))
-                .Then(context => Console.ReadLine())
-                .EndWorkflow();
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: I have to go now.Bye!")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Workflow completed.");
+                //.EndWorkflow();
         }
 
-        private void Letmegiveyouariddle()
+        private string Letmegiveyouariddle()
         {
             // read one entry randomly from IrishToasts.txt file
             var content = File.ReadAllText($"{Directory.GetCurrentDirectory()}\\Data\\Riddles.txt");
             string[] lines = content.Split('*');
             var rnd = new Random();
             var selInx = rnd.Next(0, lines.Count() - 1);
-            Console.WriteLine(lines[selInx]);
-
+            return lines[selInx];
         }
 
-        private void Letmecheeryouup()
+        private string Letmecheeryouup()
         {
             // read one entry randomly from Riddles.txt file
             var content = File.ReadAllText($"{Directory.GetCurrentDirectory()}\\Data\\IrishToasts.txt");
             string[] lines = content.Split('*');
             var rnd = new Random();
             var selInx = rnd.Next(0, lines.Count() - 1);
-            Console.WriteLine(lines[selInx]);
+            return lines[selInx];
+        }
+
+        private string ReadMood(string content)
+        {
+            if (content.Contains("happy"))
+                return "good";
+            if (content.Contains("crappy"))
+                return "bad";
+            return "bad";
         }
     }
 }

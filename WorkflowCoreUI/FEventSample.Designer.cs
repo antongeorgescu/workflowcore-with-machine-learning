@@ -34,6 +34,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tbWorkflowId = new System.Windows.Forms.TextBox();
             this.bnGetWorkflowId = new System.Windows.Forms.Button();
+            this.bnWorkflowMonitor = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -90,11 +91,22 @@
             this.bnGetWorkflowId.UseVisualStyleBackColor = true;
             this.bnGetWorkflowId.Click += new System.EventHandler(this.bnGetWorkflowId_Click);
             // 
+            // bnWorkflowMonitor
+            // 
+            this.bnWorkflowMonitor.Location = new System.Drawing.Point(22, 182);
+            this.bnWorkflowMonitor.Name = "bnWorkflowMonitor";
+            this.bnWorkflowMonitor.Size = new System.Drawing.Size(186, 29);
+            this.bnWorkflowMonitor.TabIndex = 6;
+            this.bnWorkflowMonitor.Text = "Workflows Monitor";
+            this.bnWorkflowMonitor.UseVisualStyleBackColor = true;
+            this.bnWorkflowMonitor.Click += new System.EventHandler(this.bnWorkflowMonitor_Click);
+            // 
             // FEventSample
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(536, 224);
+            this.Controls.Add(this.bnWorkflowMonitor);
             this.Controls.Add(this.bnGetWorkflowId);
             this.Controls.Add(this.tbWorkflowId);
             this.Controls.Add(this.label3);
@@ -119,5 +131,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbWorkflowId;
         private System.Windows.Forms.Button bnGetWorkflowId;
+        private System.Windows.Forms.Button bnWorkflowMonitor;
     }
 }

@@ -23,7 +23,7 @@ namespace WorkflowCoreUI
             //    .Then<CustomMessage>()
             //        .Input(step => step.Message, data => "The data from the event is " + data.Value1)
             //    .Then(context => Console.WriteLine("workflow complete"));
-            var msg = "hey";
+            //var msg = "hey";
         }
     }
 }

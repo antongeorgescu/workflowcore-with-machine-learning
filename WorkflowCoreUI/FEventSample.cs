@@ -64,5 +64,11 @@ namespace WorkflowCoreUI
             var wkflMsg = ss.ReadString();
             tbWorkflowId.Text = wkflMsg.Split('=')[1];
         }
+
+        private void bnWorkflowMonitor_Click(object sender, EventArgs e)
+        {
+            var fwks = new FWorkflowMonitor();
+            fwks.Show();
+        }
     }
 }

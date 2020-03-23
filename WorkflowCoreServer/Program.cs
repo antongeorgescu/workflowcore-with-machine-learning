@@ -40,6 +40,11 @@ namespace WorkflowCoreServer
             //host.PublishEvent("MyEvent", workflowId, value);
 
             Console.ReadLine();
+            var result = host.TerminateWorkflow(workflowId).Result;
+            if (result)
+                Console.WriteLine($"Workflow {workflowId} finished with status SUCCESS");
+            else
+                Console.WriteLine($"Workflow {workflowId} finished with status FAILED");
             host.Stop();
         }
 
