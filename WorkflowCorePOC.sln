@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowCoreServer", "Workf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowCoreUI", "WorkflowCoreUI\WorkflowCoreUI.csproj", "{6F9CF22C-D1FB-4957-A6BD-44B4D8D0A21D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCoreWebApp", "..\..\WorkflowCoreWebApp\WorkflowCoreWebApp.csproj", "{EC42355B-B8A6-4A36-B673-887EAD36A803}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{6F9CF22C-D1FB-4957-A6BD-44B4D8D0A21D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F9CF22C-D1FB-4957-A6BD-44B4D8D0A21D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F9CF22C-D1FB-4957-A6BD-44B4D8D0A21D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC42355B-B8A6-4A36-B673-887EAD36A803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC42355B-B8A6-4A36-B673-887EAD36A803}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC42355B-B8A6-4A36-B673-887EAD36A803}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC42355B-B8A6-4A36-B673-887EAD36A803}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

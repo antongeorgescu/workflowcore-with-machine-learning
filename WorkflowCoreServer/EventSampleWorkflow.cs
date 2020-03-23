@@ -53,10 +53,11 @@ namespace WorkflowCoreServer
                     .Output(data => data.Value1, step => step.EventData)
                 .Then<GetLocationInfo>()
                     .Input(step => step.Location, data => "Manuel replies: " + data.Value1)
-                    .Output(data => data.Value1, step => step.CityCode)
+                    .Output(data => data.Value1, step => step.Location)
                 .Then<GetWeatherData>()
-                    .Input(step => step.LocationCode, data => data.Value1)
-
+                    .Input(step => step.CityCode, data => data.Value1)
+                .Then(context => Console.WriteLine("Otto says: I have to go now.Bye!"))
+                .Then(context => Console.ReadLine())
                 .EndWorkflow();
         }
 
