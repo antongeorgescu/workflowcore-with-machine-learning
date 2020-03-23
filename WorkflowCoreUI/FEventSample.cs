@@ -22,7 +22,7 @@ namespace WorkflowCoreUI
 
             //start the workflow host
             host = serviceProvider.GetService<IWorkflowHost>();
-            host.RegisterWorkflow<EventSampleWorkflow, MyDataClass>();
+            host.RegisterWorkflow<EventSampleWorkflow, DataRelay>();
             host.Start();
 
             //var initialData = new MyDataClass();

@@ -28,10 +28,10 @@ namespace WorkflowCoreServer
 
             //start the workflow host
             var host = serviceProvider.GetService<IWorkflowHost>();
-            host.RegisterWorkflow<EventSampleWorkflow, MyDataClass>();
+            host.RegisterWorkflow<EventSampleWorkflow, DataRelay>();
             host.Start();
 
-            var initialData = new MyDataClass();
+            var initialData = new DataRelay();
             workflowId = host.StartWorkflow("EventSampleWorkflow", 1, initialData).Result;
             Console.WriteLine($"Workflow ID: {workflowId}");
 

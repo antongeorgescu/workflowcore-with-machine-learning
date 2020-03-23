@@ -5,7 +5,7 @@ using WorkflowCoreUI;
 
 namespace WorkflowCoreUI
 {
-    public class EventSampleWorkflow : IWorkflow<MyDataClass>
+    public class EventSampleWorkflow : IWorkflow<DataRelay>
     {
         public string Id => "EventSampleWorkflow";
 
@@ -13,7 +13,7 @@ namespace WorkflowCoreUI
 
         public int Version => 1;
             
-        public void Build(IWorkflowBuilder<MyDataClass> builder)
+        public void Build(IWorkflowBuilder<DataRelay> builder)
         {
             //builder
             //    .StartWith(context => ExecutionResult.Next())

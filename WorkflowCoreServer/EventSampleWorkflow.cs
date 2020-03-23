@@ -7,13 +7,13 @@ using WorkflowCoreServer.Steps;
 
 namespace WorkflowCoreServer
 {
-    public class EventSampleWorkflow : IWorkflow<MyDataClass>
+    public class EventSampleWorkflow : IWorkflow<DataRelay>
     {
         public string Id => "EventSampleWorkflow";
             
         public int Version => 1;
             
-        public void Build(IWorkflowBuilder<MyDataClass> builder)
+        public void Build(IWorkflowBuilder<DataRelay> builder)
         {
             var branch1 = builder.CreateBranch()
                 //.StartWith(context => ExecutionResult.Next())
