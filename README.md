@@ -7,6 +7,6 @@ Down below is a diagram of the implementation that shows the steps involved in t
 2) Custom messages, issued by the human operator;
 3) Event Data triggering activities in the workflow
 
-![](https://user-images.githubusercontent.com/6631390/77421858-f02f9080-6da2-11ea-869a-d76c6f698400.png)
+![](https://user-images.githubusercontent.com/6631390/77425602-5f0fe800-6da9-11ea-844a-17e1281950d4.png)
 
 
