@@ -50,8 +50,8 @@ namespace WorkflowCoreServer
                 .Then<CustomMessage>()
                     .Input(step => step.Message, data => "Manuel replies: " + data.Value1)
                     .Decide(data => data.Value1)
-                        .Branch((data, outcome) => ReadMood(data.Value1) == "bad", branch1)
-                        .Branch((data, outcome) => ReadMood(data.Value1) == "good", branch2)
+                        .Branch((data, outcome) => ReadMood(data.Value1) == "negative", branch1)
+                        .Branch((data, outcome) => ReadMood(data.Value1) == "positive", branch2)
                 .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
                     .Output(data => data.Value1, step => step.EventData)
                 .Then<CustomMessage>()
@@ -94,11 +94,14 @@ namespace WorkflowCoreServer
 
         private string ReadMood(string content)
         {
-            if (content.Contains("happy"))
-                return "good";
-            if (content.Contains("crappy"))
-                return "bad";
-            return "bad";
+            //if (content.Contains("happy"))
+            //    return "good";
+            //if (content.Contains("crappy"))
+            //    return "bad";
+            //return "bad";
+            var result = (new RunSentimentAnalysis()).SentimentInfo(content);
+            return result.Result.ToLower();
+            
         }
     }
 }
