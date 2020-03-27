@@ -16,9 +16,10 @@ import re, string
 from nltk.corpus import stopwords
 from nltk import FreqDist
 import random
-from nltk import classify
+#from nltk import classify
 from nltk import NaiveBayesClassifier
-from nltk.tokenize import word_tokenize
+#from nltk.tokenize import word_tokenize
+import pickle
 
 #------------------- Step 2 — Tokenizing the Data ------------------------------------
 
@@ -133,13 +134,17 @@ classifier = NaiveBayesClassifier.train(train_data)
 
 #print(classifier.show_most_informative_features(10))
 
+f = open('./persistence/nbsentimentclassifier.pickle', 'wb')
+pickle.dump(classifier, f)
+f.close()
+
 #-------------------- TEST ---------------------------------------------------------------
 #custom_tweet = "I ordered just once from TerribleCo, they screwed up, never used the app again."
 
-custom_tweet = ".i've been working with Mary L who has been working with Matt to find a solution to the internet issues at 2RS and Standish.  I've reached out to John Rouse to understand how we can execute on the solution that has been devised.  What i need to understand is if the subnet which is causing the issue is related to internet access....apologies in advance if that is a dumb question...."
-custom_tweet = "We may have issues with the order of recovery here, as I think we are going to have major issues with Clientstar.  We are not 100% certain yet but we have been told we can't use the Adminstar account any longer and all these apps use that.  We may need clarification from Mehul or one of his guys."
-custom_tweet = "I dunno, I feel rather crappy and depressed today."
-
-custom_tokens = remove_noise(word_tokenize(custom_tweet))
-
-print(classifier.classify(dict([token, True] for token in custom_tokens)))
+#custom_tweet = ".i've been working with Mary L who has been working with Matt to find a solution to the internet issues at 2RS and Standish.  I've reached out to John Rouse to understand how we can execute on the solution that has been devised.  What i need to understand is if the subnet which is causing the issue is related to internet access....apologies in advance if that is a dumb question...."
+#custom_tweet = "We may have issues with the order of recovery here, as I think we are going to have major issues with Clientstar.  We are not 100% certain yet but we have been told we can't use the Adminstar account any longer and all these apps use that.  We may need clarification from Mehul or one of his guys."
+# custom_tweet = "I dunno, I feel rather crappy and depressed today. I do not see any sense looking around me.Everything is dark and discouraging."
+# 
+# custom_tokens = remove_noise(word_tokenize(custom_tweet))
+# 
+# print(classifier.classify(dict([token, True] for token in custom_tokens)))
