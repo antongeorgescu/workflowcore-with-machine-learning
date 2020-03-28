@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 using WorkflowCoreServer.Steps;
@@ -30,10 +35,18 @@ namespace WorkflowCoreServer
                 .StartWith<SystemMessage>()
                     .Input(step => step.Message, data => "Otto says: Glad you are in a good mood today, Manuel.")
                 .Then<SystemMessage>()
-                    .Input(step => step.Message, data => "Otto says: Let's toast to the good times...")
+                    .Input(step => step.Message, data => "Otto says: Let's cheer for the good times...")
                 .Then<SystemMessage>()
                     .Input(step => step.Message, data => Letmecheeryouup());
-            
+
+            var branch3 = builder.CreateBranch()
+                .StartWith<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: Good hearing from you, Manuel.")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => "Otto says: Let's toast to better times...")
+                .Then<SystemMessage>()
+                    .Input(step => step.Message, data => Letmegetacoktailforya());
+
             builder
                 .StartWith<SystemMessage>()
                     .Input(step => step.Message, data => "Workflow started...")
@@ -52,6 +65,7 @@ namespace WorkflowCoreServer
                     .Decide(data => data.Value1)
                         .Branch((data, outcome) => ReadMood(data.Value1) == "negative", branch1)
                         .Branch((data, outcome) => ReadMood(data.Value1) == "positive", branch2)
+                        .Branch((data, outcome) => ReadMood(data.Value1) == "undecided", branch3)
                 .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
                     .Output(data => data.Value1, step => step.EventData)
                 .Then<CustomMessage>()
@@ -92,16 +106,67 @@ namespace WorkflowCoreServer
             return lines[selInx];
         }
 
+        private string Letmegetacoktailforya()
+        {
+            string url = @"https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a";
+            HttpWebRequest request = WebRequest.CreateHttp(url);
+            request.Method = "GET"; // or "POST", "PUT", "PATCH", "DELETE", etc.
+
+            string result = "";
+            
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                // Do something with the response
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    // Get a reader capable of reading the response stream
+                    using (StreamReader myStreamReader = new StreamReader(responseStream, Encoding.UTF8))
+                    {
+                        // Read stream content as string
+                        string responseJSON = myStreamReader.ReadToEnd();
+
+                        // Assuming the response is in JSON format, deserialize it
+                        // creating an instance of TData type (generic type declared before).
+                        var oresult = JsonConvert.DeserializeObject<object>(responseJSON);
+
+                        var getrandom = new Random();
+                        int inx = getrandom.Next(0, ((dynamic)JsonConvert.DeserializeObject(responseJSON)).drinks.Count - 1);
+
+                        var drinkName = ((dynamic)JsonConvert.DeserializeObject(responseJSON)).drinks[inx].strDrink;
+                        var drinkInstructions = ((dynamic)JsonConvert.DeserializeObject(responseJSON)).drinks[inx].strInstructions;
+                        result = $"{drinkName} | {drinkInstructions}";
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static async Task<string> Getacocktail()
+        {
+            var requestUri = @"https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
+        }
+
         private string ReadMood(string content)
         {
-            //if (content.Contains("happy"))
-            //    return "good";
-            //if (content.Contains("crappy"))
-            //    return "bad";
-            //return "bad";
-            var result = (new RunSentimentAnalysis()).SentimentInfo(content);
-            return result.Result.ToLower();
+            string result;
+            try
+            {
+                //var asyncResult = (new RunSentimentAnalysis()).SentimentInfoAsync(content);
+                //result = asyncResult.Result.ToLower();
+
+                result = (new RunSentimentAnalysis()).SentimentInfo(content).ToLower();
             
+            }
+            catch(Exception ex)
+            {
+                result = "undecided";
+            }
+            return result; 
         }
     }
 }
