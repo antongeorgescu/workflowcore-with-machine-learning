@@ -12,10 +12,11 @@ namespace WorkflowCoreServer
     {
         private static int numThreads = 4;
         private static string workflowId;
+        private static Thread workflow;
 
         public static void Main(string[] args)
         {
-            var workflow = new Thread(RunWorkflow);
+            workflow = new Thread(RunWorkflow);
             workflow.Start();
 
             // Start namedpipes server
@@ -33,18 +34,15 @@ namespace WorkflowCoreServer
 
             var initialData = new DataRelay();
             workflowId = host.StartWorkflow("EventSampleWorkflow", 1, initialData).Result;
-            Console.WriteLine($"Workflow ID: {workflowId}");
-
-            //Console.WriteLine("Enter value to publish");
-            //string value = Console.ReadLine();
-            //host.PublishEvent("MyEvent", workflowId, value);
-
+            Console.WriteLine($"\tWorkflow ID: {workflowId}");
+            
             Console.ReadLine();
+            
             var result = host.TerminateWorkflow(workflowId).Result;
             if (result)
-                Console.WriteLine($"Workflow {workflowId} finished with status SUCCESS");
+                Console.WriteLine($"\tSystem says: Workflow {workflowId} terminated with status SUCCESS");
             else
-                Console.WriteLine($"Workflow {workflowId} finished with status FAILED");
+                Console.WriteLine($"\tSystem says: Workflow {workflowId} terminated with status FAILED");
             host.Stop();
         }
 

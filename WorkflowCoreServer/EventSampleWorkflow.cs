@@ -49,7 +49,7 @@ namespace WorkflowCoreServer
 
             builder
                 .StartWith<SystemMessage>()
-                    .Input(step => step.Message, data => "Workflow started...")
+                    .Input(step => step.Message, data => "\tSystem says: Workflow started...")
                 .Then<SystemMessage>()
                     .Input(step => step.Message, data => "Otto says: Hello Manuel!")
                 .WaitFor("MyEvent", (data, context) => context.Workflow.Id, data => DateTime.Now)
@@ -82,8 +82,8 @@ namespace WorkflowCoreServer
                 .Then<SystemMessage>()
                     .Input(step => step.Message, data => "Otto says: I have to go now.Bye!")
                 .Then<SystemMessage>()
-                    .Input(step => step.Message, data => "Workflow completed.");
-                //.EndWorkflow();
+                    .Input(step => step.Message, data => $"\tSystem says: Workflow completed.\n\tSystem says: Hit any key to terminate the workflow...")
+                .EndWorkflow();
         }
 
         private string Letmegiveyouariddle()
